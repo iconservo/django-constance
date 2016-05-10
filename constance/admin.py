@@ -118,7 +118,9 @@ class ConstanceAdmin(admin.ModelAdmin):
             **dict(config._backend.mget(settings.CONFIG.keys())))
         form = ConstanceForm(initial=initial)
         if request.method == 'POST':
-            form = ConstanceForm(data=request.POST, initial=initial)
+            data = request.POST.copy()
+            data['version'] = initial['version']
+            form = ConstanceForm(data=data, initial=initial)
             if form.is_valid():
                 form.save()
                 # In django 1.5 this can be replaced with self.message_user
